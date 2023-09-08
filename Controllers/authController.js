@@ -1,13 +1,13 @@
 import User from "../models/User.js";
-//import bcrypt from 'bcryptjs'
-//import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // user register
 export const register = async (req, res) => {
   try {
     //hashing password
-    //const salt = bcrypt.genSaltSync(10)
-    //const hash = bcrypt.hashSync(req.body.password, salt)
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
 
     const newUser = new User({
       username: req.body.username,
@@ -55,7 +55,11 @@ export const login = async (req, res) => {
     const { password, role, ...rest } = user._doc;
 
     // create jwt token
-    //const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn:"15d" })
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "15d" }
+    );
 
     // set token in the browser cookies and send the response to the client
     res
